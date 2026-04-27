@@ -86,57 +86,64 @@ function toggleMenu() {
 // =========================================
 
 function navegar(nombre, tipo, idPagina, acciones = []) {
-    // 1. Siempre cerramos el menú lateral por si acaso
+    // 1. Limpieza de UI
     const menu = document.getElementById('side-menu');
     const overlay = document.getElementById('overlay');
     menu.classList.remove('open');
     overlay.style.display = 'none';
 
-    // 2. Si idPagina es '_self', no tocamos las secciones de contenido
+    // 2. Gestión de Secciones (Cuerpo)
     if (idPagina !== '_self' && idPagina !== null) {
-        // Ocultamos todas y mostramos la nueva
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         const targetPage = document.getElementById(idPagina);
         if (targetPage) {
             targetPage.classList.add('active');
-            // Opcional: volver el scroll al inicio solo si cambiamos de página
             document.getElementById('app-content').scrollTop = 0;
         }
     }
 
-    // 3. El resto de la lógica (Header y Submenú) se ejecuta SIEMPRE
+    // 3. Gestión de Header
     const mainNav = document.getElementById('header-main-nav');
     const backNav = document.getElementById('header-back-nav');
     const submenu = document.getElementById('submenu-content');
-    
+    const dotMenu = document.getElementById('dropdown-container'); // Importante tener este ID
+
     if (tipo === 'tipo1') {
-        paginaPadreActual = { nombre, id: idPagina, acciones };
+        // CORRECCIÓN: Solo guardamos como padre si el ID es real, no si es '_self'
+        if (idPagina !== '_self') {
+            paginaPadreActual = { nombre, id: idPagina, acciones };
+        }
+
         mainNav.style.display = 'flex';
         backNav.style.display = 'none';
         document.getElementById('header-title').innerText = nombre;
 
-        // Reconstruimos el submenú con las nuevas acciones
+        // Limpieza y Reconstrucción del submenú
         submenu.innerHTML = '';
-        acciones.forEach(acc => {
-            if (!acc.ejecutar) return; // Si no hay función, saltamos esta opción
+        
+        if (acciones.length > 0) {
+            dotMenu.style.display = 'block'; // Mostramos los tres puntos
+            acciones.forEach(acc => {
+                if (!acc.ejecutar) return;
+                const btn = document.createElement('button');
+                btn.innerText = acc.nombre;
+                btn.onclick = () => {
+                    if (typeof acc.ejecutar === 'function') acc.ejecutar();
+                    toggleSubMenu();
+                };
+                submenu.appendChild(btn);
+            });
+        } else {
+            dotMenu.style.display = 'none'; // Ocultamos si no hay acciones
+        }
 
-            const btn = document.createElement('button');
-            btn.innerText = acc.nombre;
-            btn.onclick = () => {
-                if (typeof acc.ejecutar === 'function') {
-                    acc.ejecutar();
-                }
-                toggleSubMenu();
-            };
-            submenu.appendChild(btn);
-        });
     } else {
+        // Tipo 2 (Subpágina)
         mainNav.style.display = 'none';
         backNav.style.display = 'flex';
         document.getElementById('header-subtitle').innerText = nombre;
     }
 }
-
 
 function volver() {
     // Navegamos de vuelta a la página padre que guardamos previamente
@@ -154,7 +161,8 @@ function volver() {
 // =========================================
 
 function toggleSubMenu() {
-    document.getElementById('submenu-content').classList.toggle('show');
+    const sub = document.getElementById('submenu-content');
+    sub.classList.toggle('show');
 }
 
 // Cerrar submenú o menú lateral si se hace click fuera
@@ -246,6 +254,7 @@ contentArea.addEventListener('touchmove', e => {
     // Solo si estamos arriba del todo y el movimiento es hacia abajo
     if (scrollTop === 0 && (touchY - touchStartPull) > 150) {
         // Opcional: podrías poner un aviso visual aquí
+        
         window.location.reload();
     }
 }, {passive: true});
@@ -310,8 +319,18 @@ document.addEventListener('DOMContentLoaded', () => {
     ]);
     */
     // Opción B (Más automática): Si quieres que siempre sea el primer <li> del menú
+    //const primerItem = document.querySelector('#side-menu li');
+    //if (primerItem) primerItem.click();
+    // opcion C, la B no funciona, no muestra el submenu
     const primerItem = document.querySelector('#side-menu li');
-    if (primerItem) primerItem.click();
+    if (primerItem) {
+        // Obtenemos el texto que hay dentro del atributo onclick
+        const codigoOnClick = primerItem.getAttribute('onclick');
+        // Lo ejecutamos manualmente
+        if (codigoOnClick) {
+            eval(codigoOnClick); 
+        }
+    }
 });
 
 /**

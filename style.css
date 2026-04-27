@@ -173,6 +173,7 @@ html, body {
     min-width: 150px;
     flex-direction: column;
     overflow: hidden;
+    z-index: 1001;
 }
 
 .submenu.show {
@@ -187,6 +188,16 @@ html, body {
     font-size: 0.9rem;
     cursor: pointer;
     color: #333;
+    width: 100%; /* Asegura que el área de clic ocupe todo el ancho */
+    transition: background-color 0.2s;
+    border-bottom: 1px solid #f0f0f0; /* Separación sutil entre opciones */
+}
+.submenu button:last-child {
+    border-bottom: none; /* El último botón no necesita raya */
+}
+
+.submenu button:active {
+    background-color: #f5f5f5; /* Efecto visual al tocar (feedback táctil) */
 }
 
 .submenu button:hover {
