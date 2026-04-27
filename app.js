@@ -81,45 +81,53 @@ function toggleMenu() {
 // 2. NAVEGACIÓN Y CAMBIO DE VISTAS
 // =========================================
 
-function navegar(nombre, tipo, acciones = []) {
-    // Cerramos el menú (la función toggleMenu ya limpia el overlay)
-    toggleMenu(); 
-    
+function navegar(nombre, tipo, idPagina, acciones = []) {
+    // 1. Siempre cerramos el menú lateral por si acaso
+    const menu = document.getElementById('side-menu');
+    const overlay = document.getElementById('overlay');
+    menu.classList.remove('open');
+    overlay.style.display = 'none';
+
+    // 2. Si idPagina es '_self', no tocamos las secciones de contenido
+    if (idPagina !== '_self' && idPagina !== null) {
+        // Ocultamos todas y mostramos la nueva
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        const targetPage = document.getElementById(idPagina);
+        if (targetPage) {
+            targetPage.classList.add('active');
+            // Opcional: volver el scroll al inicio solo si cambiamos de página
+            document.getElementById('app-content').scrollTop = 0;
+        }
+    }
+
+    // 3. El resto de la lógica (Header y Submenú) se ejecuta SIEMPRE
     const mainNav = document.getElementById('header-main-nav');
     const backNav = document.getElementById('header-back-nav');
-    const content = document.getElementById('app-content');
     const submenu = document.getElementById('submenu-content');
-
+    
     if (tipo === 'tipo1') {
-        // ESTADO 1: Cabecera con ☰ y ⋮
         mainNav.style.display = 'flex';
         backNav.style.display = 'none';
         document.getElementById('header-title').innerText = nombre;
-        content.innerHTML = `<h1>Contenido de ${nombre}</h1><p>Esta es una página con opciones en los tres puntos.</p>`;
-        // --- LÓGICA DEL SUBMENÚ DINÁMICO ---
-        submenu.innerHTML = ''; // Limpiamos las acciones anteriores
-        
-        acciones.forEach(accion => {
+
+        // Reconstruimos el submenú con las nuevas acciones
+        submenu.innerHTML = '';
+        acciones.forEach(acc => {
             const btn = document.createElement('button');
-            btn.innerText = accion.nombre;
-            // Al hacer click, ejecuta la función y cierra el submenú
+            btn.innerText = acc.nombre;
             btn.onclick = () => {
-            if (typeof accion.ejecutar === 'function') {
-                    accion.ejecutar(); // ¡Ejecución segura!
-                }
-                toggleSubMenu(); // Cerrar el dropdown al terminar
+                acc.ejecutar();
                 toggleSubMenu();
             };
             submenu.appendChild(btn);
         });
     } else {
-        // ESTADO 2: Subpágina con ← Volver
         mainNav.style.display = 'none';
         backNav.style.display = 'flex';
         document.getElementById('header-subtitle').innerText = nombre;
-        content.innerHTML = `<h1>Vista Detalle: ${nombre}</h1><p>Desde aquí solo puedes volver al menú principal.</p>`;
     }
 }
+
 
 function volver() {
     // Resetear a la vista inicial
@@ -230,14 +238,57 @@ contentArea.addEventListener('touchmove', e => {
     }
 }, {passive: true});
 
+function actualizaAlgo(){
+    generarContenidoAleatorio('algo');
+}
+function generarContenidoAleatorio(idDestino) {
+    const elemento = document.getElementById(idDestino);
+    if (!elemento) return;
+
+    const opciones = [
+        () => `Número aleatorio: <b>${Math.floor(Math.random() * 1000)}</b>`,
+        () => `Frase del momento: <b>${obtenerFrase()}</b>`,
+        () => `Estado del sistema: <span style="color: ${Math.random() > 0.5 ? 'green' : 'red'}">● Activo</span>`,
+        () => `Hora de actualización: <b>${new Date().toLocaleTimeString()}</b>`
+    ];
+
+    // Elegimos una función al azar del array y la ejecutamos
+    const seleccionada = opciones[Math.floor(Math.random() * opciones.length)];
+    elemento.innerHTML = seleccionada();
+}
+
+function obtenerFrase() {
+    const frases = [
+        "La persistencia es la clave del éxito.",
+        "PWA: Rápida, instalable y fiable.",
+        "El código es poesía escrita en lógica.",
+        "Si puedes imaginarlo, puedes programarlo."
+    ];
+    return frases[Math.floor(Math.random() * frases.length)];
+}
 
 function accionA() {
     alert("Ejecutando Acción A");
 }
 
 function abrirAjustes() {
-    console.log("Abriendo ajustes...");
+    console.log("Abriendo abrirAjustes...");
 }
+
+function abrirTutorial() {
+    console.log("Abriendo abrirTutorial...");
+}
+
+function contactarSoporte() {
+    console.log("Abriendo contactarSoporte...");
+}
+
+function ponerModoOscuro() {
+    const pagina = document.getElementById('page-ajustes');
+    pagina.style.backgroundColor = '#333';
+    pagina.style.color = 'white';
+}
+
 
 /**
  * Nota: Al no usar preventDefault() en el evento 'beforeinstallprompt',

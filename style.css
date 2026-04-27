@@ -223,3 +223,33 @@ html, body {
     justify-content: space-between;
     width: 100%;
 }
+
+
+.page.active {
+    display: block; /* Solo la que tenga la clase 'active' se ve */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+/* Añade esto a tu archivo CSS */
+.page {
+    display: none;
+    padding: 15px;
+    box-sizing: border-box; /* Fundamental para que el padding no rompa el ancho */
+    width: 100%;
+    min-height: 100%;
+    animation: fadeIn 0.3s; /* Un toque de elegancia */
+
+}
+
+/* Para los formularios en móviles, que no se peguen a los bordes */
+input, select, textarea {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px; /* Evita que iOS haga zoom automático al enfocar */
+}
