@@ -51,6 +51,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+// Abrir/Cerrar Menú Lateral
+function toggleMenu() {
+    const menu = document.getElementById('side-menu');
+    const overlay = document.getElementById('overlay');
+    menu.classList.toggle('open');
+    overlay.style.display = menu.classList.contains('open') ? 'block' : 'none';
+}
+
+// Abrir/Cerrar Tres Puntos
+function toggleSubMenu() {
+    document.getElementById('submenu-content').classList.toggle('show');
+}
+
+// Navegación Lógica
+function navegar(nombre, tipo) {
+    toggleMenu(); // Cerrar menú al elegir
+    
+    const mainNav = document.getElementById('header-main-nav');
+    const backNav = document.getElementById('header-back-nav');
+    const content = document.getElementById('app-content');
+    
+    if (tipo === 'tipo1') {
+        // TIPO 1: Cabecera normal + Submenú
+        mainNav.style.display = 'flex';
+        backNav.style.display = 'none';
+        document.getElementById('header-title').innerText = nombre;
+        content.innerHTML = `<h1>Contenido de ${nombre}</h1><p>Aquí tienes el submenú en los 3 puntos.</p>`;
+    } else {
+        // TIPO 2: Subpágina + Flecha Volver
+        mainNav.style.display = 'none';
+        backNav.style.display = 'flex';
+        document.getElementById('header-subtitle').innerText = nombre;
+        content.innerHTML = `<h1>Vista Detalle: ${nombre}</h1><p>Solo puedes volver atrás.</p>`;
+    }
+}
+
+function volver() {
+    // Resetear a la home o estado inicial
+    document.getElementById('header-main-nav').style.display = 'flex';
+    document.getElementById('header-back-nav').style.display = 'none';
+    document.getElementById('app-content').innerHTML = `<h1>Bienvenido</h1><p>Selecciona una opción.</p>`;
+}
+
+// Cerrar submenú si se hace click fuera
+window.onclick = function(event) {
+    if (!event.target.matches('.icon-btn')) {
+        document.getElementById('submenu-content').classList.remove('show');
+    }
+}
+
+// Detectar cambios de conexión
+window.addEventListener('online', () => updateStatus(true));
+window.addEventListener('offline', () => updateStatus(false));
+
+function updateStatus(online) {
+    const status = document.getElementById('connection-status');
+    if (online) {
+        status.innerText = "● Online";
+        status.style.color = "green";
+    } else {
+        status.innerText = "○ Offline";
+        status.style.color = "red";
+    }
+}
+
 /**
  * Nota: Al no usar preventDefault() en el evento 'beforeinstallprompt',
  * Chrome en Android mostrará automáticamente el "Mini-infobar" o el
