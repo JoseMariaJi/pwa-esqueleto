@@ -51,62 +51,95 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// Abrir/Cerrar Menú Lateral
+// =========================================
+// 1. GESTIÓN DEL MENÚ LATERAL Y OVERLAY
+// =========================================
+
 function toggleMenu() {
     const menu = document.getElementById('side-menu');
     const overlay = document.getElementById('overlay');
-    menu.classList.toggle('open');
-    overlay.style.display = menu.classList.contains('open') ? 'block' : 'none';
+    
+    const isOpen = menu.classList.contains('open');
+
+    if (isOpen) {
+        menu.classList.remove('open');
+        overlay.style.display = 'none';
+    } else {
+        menu.classList.add('open');
+        overlay.style.display = 'block';
+    }
 }
 
-// Abrir/Cerrar Tres Puntos
-function toggleSubMenu() {
-    document.getElementById('submenu-content').classList.toggle('show');
-}
+// =========================================
+// 2. NAVEGACIÓN Y CAMBIO DE VISTAS
+// =========================================
 
-// Navegación Lógica
 function navegar(nombre, tipo) {
-    toggleMenu(); // Cerrar menú al elegir
+    // Cerramos el menú (la función toggleMenu ya limpia el overlay)
+    toggleMenu(); 
     
     const mainNav = document.getElementById('header-main-nav');
     const backNav = document.getElementById('header-back-nav');
     const content = document.getElementById('app-content');
     
     if (tipo === 'tipo1') {
-        // TIPO 1: Cabecera normal + Submenú
+        // ESTADO 1: Cabecera con ☰ y ⋮
         mainNav.style.display = 'flex';
         backNav.style.display = 'none';
         document.getElementById('header-title').innerText = nombre;
-        content.innerHTML = `<h1>Contenido de ${nombre}</h1><p>Aquí tienes el submenú en los 3 puntos.</p>`;
+        content.innerHTML = `<h1>Contenido de ${nombre}</h1><p>Esta es una página con opciones en los tres puntos.</p>`;
     } else {
-        // TIPO 2: Subpágina + Flecha Volver
+        // ESTADO 2: Subpágina con ← Volver
         mainNav.style.display = 'none';
         backNav.style.display = 'flex';
         document.getElementById('header-subtitle').innerText = nombre;
-        content.innerHTML = `<h1>Vista Detalle: ${nombre}</h1><p>Solo puedes volver atrás.</p>`;
+        content.innerHTML = `<h1>Vista Detalle: ${nombre}</h1><p>Desde aquí solo puedes volver al menú principal.</p>`;
     }
 }
 
 function volver() {
-    // Resetear a la home o estado inicial
+    // Resetear a la vista inicial
     document.getElementById('header-main-nav').style.display = 'flex';
     document.getElementById('header-back-nav').style.display = 'none';
-    document.getElementById('app-content').innerHTML = `<h1>Bienvenido</h1><p>Selecciona una opción.</p>`;
+    document.getElementById('header-title').innerText = "Mi PWA";
+    document.getElementById('app-content').innerHTML = `<h1>Bienvenido</h1><p>Selecciona una opción del menú lateral.</p>`;
 }
 
-// Cerrar submenú si se hace click fuera
+// =========================================
+// 3. SUBMENÚ (TRES PUNTOS) Y CLICKS EXTERNOS
+// =========================================
+
+function toggleSubMenu() {
+    document.getElementById('submenu-content').classList.toggle('show');
+}
+
+// Cerrar submenú o menú lateral si se hace click fuera
 window.onclick = function(event) {
+    // Si el usuario hace click en el overlay, cerramos el menú
+    if (event.target.id === 'overlay') {
+        toggleMenu();
+    }
+    
+    // Si hace click fuera de los tres puntos, cerramos el submenú
     if (!event.target.matches('.icon-btn')) {
-        document.getElementById('submenu-content').classList.remove('show');
+        const sub = document.getElementById('submenu-content');
+        if (sub && sub.classList.contains('show')) {
+            sub.classList.remove('show');
+        }
     }
 }
 
-// Detectar cambios de conexión
+// =========================================
+// 4. ESTADO DE CONEXIÓN (FOOTER)
+// =========================================
+
 window.addEventListener('online', () => updateStatus(true));
 window.addEventListener('offline', () => updateStatus(false));
 
 function updateStatus(online) {
     const status = document.getElementById('connection-status');
+    if (!status) return; // Evita errores si el span no existe aún
+    
     if (online) {
         status.innerText = "● Online";
         status.style.color = "green";

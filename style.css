@@ -60,7 +60,7 @@ html, body {
 }
 
 /* =========================================
-   3. MENÚ LATERAL (DRAWER) Y OVERLAY
+   3. MENÚ LATERAL (DRAWER) MEJORADO
    ========================================= */
 #side-menu {
     position: fixed;
@@ -78,35 +78,80 @@ html, body {
     transform: translateX(var(--drawer-width));
 }
 
-.menu-header {
-    background: #333;
-    color: white;
-    padding: 20px;
-    font-weight: bold;
+/* BANNER SUPERIOR DEL MENÚ */
+.menu-banner {
+    width: 100%;
+    height: 150px;
+    background-image: url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=500'); /* Imagen de ejemplo */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 15px;
 }
 
+.menu-user-info {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.menu-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+/* LISTA DE OPCIONES */
 #side-menu ul {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 10px 0;
 }
 
 #side-menu li {
-    padding: 15px 20px;
-    border-bottom: 1px solid #eee;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
     cursor: pointer;
+    font-size: 0.95rem;
+    color: #333;
 }
 
 #side-menu li:active {
-    background-color: #eee;
+    background-color: #f0f0f0;
+}
+
+/* ICONOS */
+.icon {
+    margin-right: 15px;
+    font-size: 1.2rem;
+    width: 24px; /* Ancho fijo para que el texto esté alineado */
+    text-align: center;
+}
+
+/* DIVISOR MANUAL */
+.menu-divider {
+    border: 0;
+    height: 1px;
+    background: #e0e0e0;
+    margin: 10px 0;
 }
 
 #overlay {
-    display: none;
+    display: none; /* Se activa por JS */
     position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 90;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3); /* Un gris muy suave para dar profundidad */
+    z-index: 90; /* Por debajo del menú (100) pero sobre el contenido */
+    cursor: pointer;
 }
 
 /* =========================================

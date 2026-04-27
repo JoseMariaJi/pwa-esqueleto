@@ -13,13 +13,29 @@
     <div id="overlay" onclick="toggleMenu()"></div>
 
     <nav id="side-menu">
-        <div class="menu-header">Menú Principal</div>
+<div class="menu-banner">
+        <div class="menu-user-info">
+            <img src="tu-logo-o-avatar.png" alt="Logo" class="menu-avatar">
+            <span>Nombre de la App</span>
+        </div>
+    </div>
         <ul>
-            <li onclick="navegar('opcion1', 'tipo1')">Opción 1 (Con Submenú)</li>
-            <li onclick="navegar('opcion2', 'tipo1')">Opción 2 (Con Submenú)</li>
-            <li onclick="navegar('opcion3', 'tipo2')">Opción 3 (Subpágina)</li>
-            <li onclick="navegar('opcion4', 'tipo2')">Opción 4 (Subpágina)</li>
-            </ul>
+        <li onclick="navegar('Opción 1', 'tipo1')">
+            <span class="icon">🏠</span> Opción 1
+        </li>
+        <li onclick="navegar('Opción 2', 'tipo1')">
+            <span class="icon">⚙️</span> Opción 2
+        </li>
+        
+        <hr class="menu-divider">
+        
+        <li onclick="navegar('Opción 3', 'tipo2')">
+            <span class="icon">👤</span> Opción 3
+        </li>
+        <li onclick="navegar('Opción 4', 'tipo2')">
+            <span class="icon">📊</span> Opción 4
+        </li>
+        </ul>
     </nav>
 
     <header id="main-header">
