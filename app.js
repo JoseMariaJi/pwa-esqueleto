@@ -113,10 +113,14 @@ function navegar(nombre, tipo, idPagina, acciones = []) {
         // Reconstruimos el submenú con las nuevas acciones
         submenu.innerHTML = '';
         acciones.forEach(acc => {
+            if (!acc.ejecutar) return; // Si no hay función, saltamos esta opción
+
             const btn = document.createElement('button');
             btn.innerText = acc.nombre;
             btn.onclick = () => {
-                acc.ejecutar();
+                if (typeof acc.ejecutar === 'function') {
+                    acc.ejecutar();
+                }
                 toggleSubMenu();
             };
             submenu.appendChild(btn);

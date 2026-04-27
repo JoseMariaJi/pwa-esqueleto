@@ -21,15 +21,10 @@
     </div>
         <ul>
         <li onclick="navegar('Principal', 'tipo1','page-home',[
-        { nombre: 'Subopcion 1', ejecutar: navegar('Subopcion 1', 'tipo2', 'page-home-sub1') },
-        { nombre: 'Subopcion 1', ejecutar:navegar('Subopcion 2', 'tipo2', 'page-home-sub2') },
-        { nombre: 'Actualiza algo', 
-            ejecutar: () => {
-                                actualizaAlgo(); // Tu lógica de JS
-                                // No necesitamos llamar a navegar porque ya estamos en la página
-                            }
-        }
-    ])">
+                { nombre: 'Subopcion 1', ejecutar: () => navegar('Subopcion 1', 'tipo2', 'page-home-sub1') },
+                { nombre: 'Subopcion 1', ejecutar: () =>navegar('Subopcion 2', 'tipo2', 'page-home-sub2') },
+                { nombre: 'Actualiza algo', ejecutar: () =>  actualizaAlgo() }
+        ])">
             <span class="icon">🏠</span> Principal
         </li>
         <li onclick="navegar('Ayuda', 'tipo1', [
