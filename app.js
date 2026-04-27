@@ -16,17 +16,29 @@ window.addEventListener('beforeinstallprompt', (e) => {
   console.log('beforeinstallprompt fired');
   e.preventDefault();
   deferredPrompt = e;
+  // HACEMOS VISIBLE EL BOTÓN
+  const btnInstall = document.getElementById('btn-install');
+  if (btnInstall) {
+    btnInstall.style.display = 'block';
+    btnInstall.addEventListener('click', triggerInstall);
+  }
   // aquí puedes mostrar tu botón instalar si quieres:
   // document.getElementById('btn-install').style.display = 'block';
 });
 
 async function triggerInstall() {
-  if (!deferredPrompt) return console.log('No install prompt saved');
+  if (!deferredPrompt) return;
+  
   deferredPrompt.prompt();
   const { outcome } = await deferredPrompt.userChoice;
   console.log('userChoice', outcome);
+  
+  if (outcome === 'accepted') {
+    document.getElementById('btn-install').style.display = 'none';
+  }
   deferredPrompt = null;
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     if (typeof APP_VERSION !== 'undefined') {
