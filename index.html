@@ -71,7 +71,11 @@
         <span id="connection-status">● Online</span>
     </div>
 </footer>
-    <script src="./version-actual.js"></script>
+<script>
+  const script = document.createElement('script');
+  script.src = "./version-actual.js?v=" + new Date().getTime();
+  document.head.appendChild(script);
+</script>
     <script src="./app.js" defer></script>
 </body>
 </html>

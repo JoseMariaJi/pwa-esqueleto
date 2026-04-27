@@ -183,6 +183,29 @@ function handleSwipe() {
     }
 }
 
+//recuperamos el pullñ-tp-refresh
+
+let touchStartPull = 0;
+const contentArea = document.getElementById('app-content');
+const sideMenu = document.getElementById('side-menu'); // Referencia al menú
+
+contentArea.addEventListener('touchstart', e => {
+    touchStartPull = e.touches[0].clientY;
+}, {passive: true});
+
+contentArea.addEventListener('touchmove', e => {
+    // Si el menú está abierto, NO permitimos la recarga por error
+    if (sideMenu.classList.contains('open')) return;
+
+    const touchY = e.touches[0].clientY;
+    const scrollTop = contentArea.scrollTop;
+
+    // Solo si estamos arriba del todo y el movimiento es hacia abajo
+    if (scrollTop === 0 && (touchY - touchStartPull) > 150) {
+        // Opcional: podrías poner un aviso visual aquí
+        window.location.reload();
+    }
+}, {passive: true});
 
 /**
  * Nota: Al no usar preventDefault() en el evento 'beforeinstallprompt',

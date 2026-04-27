@@ -18,7 +18,7 @@ workbox.routing.registerRoute(
                  request.destination === 'script' ||
                  request.destination === 'style',
   new workbox.strategies.NetworkFirst({
-    cacheName: 'recursos-criticos',
+    cacheName: 'recursos-criticosv2',
     plugins: [
       new workbox.expiration.ExpirationPlugin({
         maxEntries: 50, // No llenamos el móvil de basura
@@ -32,7 +32,7 @@ workbox.routing.registerRoute(
 workbox.routing.registerRoute(
   ({request}) => request.destination === 'image',
   new workbox.strategies.CacheFirst({
-    cacheName: 'imagenes-cache',
+    cacheName: 'imagenes-cachev2',
     plugins: [
       new workbox.expiration.ExpirationPlugin({
         maxEntries: 60,
