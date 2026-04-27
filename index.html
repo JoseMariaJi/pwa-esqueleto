@@ -20,10 +20,16 @@
         </div>
     </div>
         <ul>
-        <li onclick="navegar('Opción 1', 'tipo1')">
+        <li onclick="navegar('Opción 1', 'tipo1',[
+        { nombre: 'Cambiar Color', ejecutar: abrirAjustes },
+        { nombre: 'Resetear', ejecutar: () => console.log('Resetear') }
+    ])">
             <span class="icon">🏠</span> Principal
         </li>
-        <li onclick="navegar('Opción 2', 'tipo1')">
+        <li onclick="navegar('Opción 2', 'tipo1', [
+        { nombre: 'Ver Tutorial', ejecutar: abrirTutorial },
+        { nombre: 'Soporte', ejecutar: contactarSoporte }
+    ])">
             <span class="icon">😏</span> Ayuda
         </li>
         
@@ -35,6 +41,10 @@
         <li onclick="navegar('Opción 4', 'tipo2')">
             <span class="icon">⚙️</span> Configuración
         </li>
+        <li onclick="navegar('Ayuda', 'tipo1', CONFIG_MENU['Ayuda'])">
+            <span class="icon">👁️‍🗨️</span> Más Ayuda
+        </li>
+
         </ul>
     </nav>
 

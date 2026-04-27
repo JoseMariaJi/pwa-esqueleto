@@ -11,6 +11,13 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+const CONFIG_MENU = {
+    'Ayuda': [
+        { nombre: 'FAQ', ejecutar: () => navegar('Preguntas', 'tipo2') },
+        { nombre: 'Contacto', ejecutar: () => alert('Email enviado') }
+    ]
+};
+
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
   console.log('beforeinstallprompt fired');
@@ -74,20 +81,37 @@ function toggleMenu() {
 // 2. NAVEGACIÓN Y CAMBIO DE VISTAS
 // =========================================
 
-function navegar(nombre, tipo) {
+function navegar(nombre, tipo, acciones = []) {
     // Cerramos el menú (la función toggleMenu ya limpia el overlay)
     toggleMenu(); 
     
     const mainNav = document.getElementById('header-main-nav');
     const backNav = document.getElementById('header-back-nav');
     const content = document.getElementById('app-content');
-    
+    const submenu = document.getElementById('submenu-content');
+
     if (tipo === 'tipo1') {
         // ESTADO 1: Cabecera con ☰ y ⋮
         mainNav.style.display = 'flex';
         backNav.style.display = 'none';
         document.getElementById('header-title').innerText = nombre;
         content.innerHTML = `<h1>Contenido de ${nombre}</h1><p>Esta es una página con opciones en los tres puntos.</p>`;
+        // --- LÓGICA DEL SUBMENÚ DINÁMICO ---
+        submenu.innerHTML = ''; // Limpiamos las acciones anteriores
+        
+        acciones.forEach(accion => {
+            const btn = document.createElement('button');
+            btn.innerText = accion.nombre;
+            // Al hacer click, ejecuta la función y cierra el submenú
+            btn.onclick = () => {
+            if (typeof accion.ejecutar === 'function') {
+                    accion.ejecutar(); // ¡Ejecución segura!
+                }
+                toggleSubMenu(); // Cerrar el dropdown al terminar
+                toggleSubMenu();
+            };
+            submenu.appendChild(btn);
+        });
     } else {
         // ESTADO 2: Subpágina con ← Volver
         mainNav.style.display = 'none';
@@ -205,6 +229,15 @@ contentArea.addEventListener('touchmove', e => {
         window.location.reload();
     }
 }, {passive: true});
+
+
+function accionA() {
+    alert("Ejecutando Acción A");
+}
+
+function abrirAjustes() {
+    console.log("Abriendo ajustes...");
+}
 
 /**
  * Nota: Al no usar preventDefault() en el evento 'beforeinstallprompt',
