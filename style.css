@@ -253,3 +253,55 @@ input, select, textarea {
     border-radius: 8px;
     font-size: 16px; /* Evita que iOS haga zoom automático al enfocar */
 }
+
+/* Botón Flotante Base */
+.fab {
+    position: fixed; /* Se queda quieto respecto a la pantalla */
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #007bff; /* Color primario de tu app */
+    color: white;
+    border: none;
+    box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 
+                0 6px 10px 0 rgba(0,0,0,0.14), 
+                0 1px 18px 0 rgba(0,0,0,0.12);
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 900; /* Por debajo del menú lateral, pero sobre el contenido */
+    transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fab:active {
+    transform: scale(0.9); /* Efecto de pulsación */
+    background-color: #0056b3;
+    box-shadow: 0 5px 5px -3px rgba(0,0,0,0.2), 
+                0 8px 10px 1px rgba(0,0,0,0.14), 
+                0 3px 14px 2px rgba(0,0,0,0.12);
+}
+/* Estilo para el FAB Extendido */
+.fab-extended {
+    width: auto;           /* Quita el ancho fijo de 60px */
+    height: 48px;          /* Un poco más bajo que el circular suele quedar mejor */
+    padding: 0 20px;       /* Espacio a los lados del texto */
+    border-radius: 24px;   /* Mitad de la altura para bordes redondeados */
+    gap: 10px;             /* Espacio entre el icono y el texto */
+    font-weight: 500;      /* Letra un poco más gruesa */
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase; /* Estilo clásico de Material Design */
+}
+
+.page.active .fab {
+    animation: bounceIn 0.5s;
+}
+
+@keyframes bounceIn {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
