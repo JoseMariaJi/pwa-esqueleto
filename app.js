@@ -186,7 +186,7 @@ function handleSwipe() {
 
 let touchStartPull = 0;
 const contentArea = document.getElementById('app-content');
-const sideMenu = document.getElementById('side-menu'); // Referencia al menú
+
 
 contentArea.addEventListener('touchstart', e => {
     touchStartPull = e.touches[0].clientY;
