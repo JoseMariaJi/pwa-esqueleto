@@ -56,6 +56,10 @@ window.addEventListener('version-lista', () => {
 });
 
 
+let paginaPadreActual = {
+    nombre: 'Principal',
+    id: 'page-home'
+};
 
 // =========================================
 // 1. GESTIÓN DEL MENÚ LATERAL Y OVERLAY
@@ -106,6 +110,7 @@ function navegar(nombre, tipo, idPagina, acciones = []) {
     const submenu = document.getElementById('submenu-content');
     
     if (tipo === 'tipo1') {
+        paginaPadreActual = { nombre, id: idPagina, acciones };
         mainNav.style.display = 'flex';
         backNav.style.display = 'none';
         document.getElementById('header-title').innerText = nombre;
@@ -134,12 +139,15 @@ function navegar(nombre, tipo, idPagina, acciones = []) {
 
 
 function volver() {
-    // Resetear a la vista inicial
-    document.getElementById('header-main-nav').style.display = 'flex';
-    document.getElementById('header-back-nav').style.display = 'none';
-    document.getElementById('header-title').innerText = "Mi PWA";
-    document.getElementById('app-content').innerHTML = `<h1>Bienvenido</h1><p>Selecciona una opción del menú lateral.</p>`;
+    // Navegamos de vuelta a la página padre que guardamos previamente
+    navegar(
+        paginaPadreActual.nombre, 
+        'tipo1', 
+        paginaPadreActual.id, 
+        paginaPadreActual.acciones
+    );
 }
+
 
 // =========================================
 // 3. SUBMENÚ (TRES PUNTOS) Y CLICKS EXTERNOS
