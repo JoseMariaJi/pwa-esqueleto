@@ -270,7 +270,7 @@ input, select, textarea {
                 0 6px 10px 0 rgba(0,0,0,0.14), 
                 0 1px 18px 0 rgba(0,0,0,0.12);
     font-size: 24px;
-    display: flex;
+    
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -284,6 +284,7 @@ input, select, textarea {
     bottom: calc(var(--footer-height) + 20px); 
     right: 20px;
     z-index: 900;
+    display: none;
 }
 
 .fab:active {
@@ -306,8 +307,9 @@ input, select, textarea {
     text-transform: uppercase; /* Estilo clásico de Material Design */
 }
 
-.page.active .fab {
+.page.active .fab, .page.active .fab-extended {
     animation: bounceIn 0.5s;
+    display: flex;
 }
 
 @keyframes bounceIn {
