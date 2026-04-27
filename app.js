@@ -301,6 +301,18 @@ function ponerModoOscuro() {
     pagina.style.color = 'white';
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Opción A: Llamar directamente a la función con los datos de la home
+    // Esto asegura que la App arranque en 'Principal'
+    /*navegar('Principal', 'tipo1', 'page-home', [
+        { nombre: 'Subopcion 1', ejecutar: () => navegar('Subopcion 1', 'tipo2', 'page-home-sub1') },
+        { nombre: 'Subopcion 2', ejecutar: () => navegar('Subopcion 2', 'tipo2', 'page-home-sub2') }
+    ]);
+    */
+    // Opción B (Más automática): Si quieres que siempre sea el primer <li> del menú
+    const primerItem = document.querySelector('#side-menu li');
+    if (primerItem) primerItem.click();
+});
 
 /**
  * Nota: Al no usar preventDefault() en el evento 'beforeinstallprompt',

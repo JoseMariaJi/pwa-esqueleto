@@ -49,24 +49,22 @@
         </ul>
     </nav>
 
-    <header id="main-header">
-        <div id="header-main-nav">
-            <button class="icon-btn" onclick="toggleMenu()">☰</button>
-            <span id="header-title">Mi App</span>
-            <div class="dropdown">
-                <button class="icon-btn" onclick="toggleSubMenu()">⋮</button>
-                <div id="submenu-content" class="submenu">
-                    <button onclick="accion('A')">Acción A</button>
-                    <button onclick="accion('B')">Acción B</button>
-                </div>
-            </div>
+<header id="main-header">
+    <div id="header-main-nav">
+        <button class="icon-btn" onclick="toggleMenu()">☰</button>
+        <span id="header-title"></span> 
+        
+        <div class="dropdown" id="dropdown-container" style="display: none;">
+            <button class="icon-btn" onclick="toggleSubMenu()">⋮</button>
+            <div id="submenu-content" class="submenu"></div>
         </div>
+    </div>
 
-        <div id="header-back-nav" style="display: none;">
-            <button class="icon-btn" onclick="volver()">←</button>
-            <span id="header-subtitle">Nombre Opción</span>
-        </div>
-    </header>
+    <div id="header-back-nav" style="display: none;">
+        <button class="icon-btn" onclick="volver()">←</button>
+        <span id="header-subtitle"></span>
+    </div>
+</header>
 
 <main id="app-content">
     <section id="page-home" class="page active">
