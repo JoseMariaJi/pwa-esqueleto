@@ -241,6 +241,7 @@ html, body {
     width: 100%;
     min-height: 100%;
     animation: fadeIn 0.3s; /* Un toque de elegancia */
+    padding-bottom: 80px; /* Suficiente espacio para que el FAB no moleste al contenido final */
 
 }
 
@@ -256,8 +257,8 @@ input, select, textarea {
 
 /* Botón Flotante Base */
 .fab {
-    position: fixed; /* Se queda quieto respecto a la pantalla */
-    bottom: 20px;
+    
+    
     right: 20px;
     width: 60px;
     height: 60px;
@@ -275,6 +276,14 @@ input, select, textarea {
     cursor: pointer;
     z-index: 900; /* Por debajo del menú lateral, pero sobre el contenido */
     transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fab, .fab-extended {
+    position: fixed;
+    /* Sumamos el margen deseado (20px) + la altura del footer */
+    bottom: calc(var(--footer-height) + 20px); 
+    right: 20px;
+    z-index: 900;
 }
 
 .fab:active {
