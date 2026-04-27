@@ -15,10 +15,10 @@
       "purpose": "any maskable"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": "/pwa-esqueleto/index.html",
   "background_color": "#ffffff",
   "display": "standalone",
-  "scope": "./",
+  "scope": "/pwa-esqueleto/",
   "theme_color": "#FF0000",
   "description": "Una estructura básica para mi Progressive Web App."
 }
