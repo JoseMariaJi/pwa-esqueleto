@@ -1,0 +1,59 @@
+/* Variables para cambiar colores fácilmente */
+:root {
+    --primary-color: #FF0000;
+    --bg-color: #ffffff;
+    --text-color: #333333;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    /* Evita el scroll elástico en móviles */
+    overscroll-behavior-y: contain;
+}
+
+h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 80%;
+}
+
+.container {
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    background: white;
+}
+
+/* Botón de ejemplo con estilo de App */
+.btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: transform 0.2s;
+    user-select: none; /* Evita seleccionar texto al tocar */
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
