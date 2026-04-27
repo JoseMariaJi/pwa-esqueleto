@@ -31,7 +31,7 @@ workbox.routing.registerRoute(
 // Aquí sí usamos CacheFirst porque las imágenes no cambian cada hora
 workbox.routing.registerRoute(
   ({request}) => request.destination === 'image',
-  new workbox.strategies.StaleWhileRevalidate({
+  new workbox.strategies.CacheFirst({
     cacheName: 'imagenes-cache',
     plugins: [
       new workbox.expiration.ExpirationPlugin({
