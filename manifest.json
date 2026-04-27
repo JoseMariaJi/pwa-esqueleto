@@ -19,6 +19,6 @@
   "background_color": "#ffffff",
   "display": "standalone",
   "scope": "/pwa-esqueleto/",
-  "theme_color": "#0000ff",
+  "theme_color": "#ff0000",
   "description": "Una estructura básica para mi Progressive Web App."
 }
