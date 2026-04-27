@@ -11,12 +11,22 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-window.addEventListener('beforeinstallprompt', e => { 
-    console.log('beforeinstallprompt fired'); 
-    e.preventDefault(); 
-    window.deferredPrompt = e; 
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  console.log('beforeinstallprompt fired');
+  e.preventDefault();
+  deferredPrompt = e;
+  // aquí puedes mostrar tu botón instalar si quieres:
+  // document.getElementById('btn-install').style.display = 'block';
+});
+
+async function triggerInstall() {
+  if (!deferredPrompt) return console.log('No install prompt saved');
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  console.log('userChoice', outcome);
+  deferredPrompt = null;
 }
-);
 
 document.addEventListener('DOMContentLoaded', () => {
     if (typeof APP_VERSION !== 'undefined') {
