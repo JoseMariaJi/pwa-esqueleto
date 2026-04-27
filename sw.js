@@ -11,11 +11,12 @@ if (workbox) {
 
   // Estrategia: Stale-While-Revalidate (Carga del caché pero actualiza por detrás)
   // Ideal para CSS, JS y el propio HTML
+  
   workbox.routing.registerRoute(
     ({request}) => request.destination === 'script' ||
                    request.destination === 'style' ||
                    request.destination === 'document',
-    new workbox.strategies.NetworkFirst({
+    new workbox.strategies.StaleWhileRevalidate({
       cacheName: 'recursos-dinamicos',
     })
   );
