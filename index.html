@@ -74,6 +74,10 @@
 <script>
   const script = document.createElement('script');
   script.src = "./version-actual.js?v=" + new Date().getTime();
+  script.onload = () => {
+      // Avisamos a app.js que la versión ya está lista
+      window.dispatchEvent(new Event('version-lista'));
+  };
   document.head.appendChild(script);
 </script>
     <script src="./app.js" defer></script>

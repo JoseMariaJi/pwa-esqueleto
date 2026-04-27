@@ -40,12 +40,11 @@ async function triggerInstall() {
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    if (typeof APP_VERSION !== 'undefined') {
-        const versionElement = document.getElementById('app-version');
-        if (versionElement) {
-            versionElement.textContent = (typeof APP_VERSION !== 'undefined') ? APP_VERSION : 'Desconocida';
-        }
+window.addEventListener('version-lista', () => {
+    const versionElement = document.getElementById('app-version');
+    if (versionElement && typeof APP_VERSION !== 'undefined') {
+        versionElement.textContent = APP_VERSION;
+        console.log("Versión actualizada a:", APP_VERSION);
     }
 });
 
