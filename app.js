@@ -116,14 +116,20 @@ function toggleSubMenu() {
 
 // Cerrar submenú o menú lateral si se hace click fuera
 window.onclick = function(event) {
-    // Si el usuario hace click en el overlay, cerramos el menú
-    if (event.target.id === 'overlay') {
-        toggleMenu();
+    const menu = document.getElementById('side-menu');
+    const sub = document.getElementById('submenu-content');
+    const overlay = document.getElementById('overlay');
+
+    // CASO A: El usuario hace click/touch en el overlay (fuera del menú)
+    if (event.target === overlay) {
+        // Solo cerramos si el menú está abierto
+        if (menu.classList.contains('open')) {
+            toggleMenu();
+        }
     }
     
-    // Si hace click fuera de los tres puntos, cerramos el submenú
+    // CASO B: Cerrar el submenú de los tres puntos si toca en cualquier otro lado
     if (!event.target.matches('.icon-btn')) {
-        const sub = document.getElementById('submenu-content');
         if (sub && sub.classList.contains('show')) {
             sub.classList.remove('show');
         }
