@@ -70,6 +70,7 @@ function toggleMenu() {
     }
 }
 
+
 // =========================================
 // 2. NAVEGACIÓN Y CAMBIO DE VISTAS
 // =========================================
@@ -148,6 +149,34 @@ function updateStatus(online) {
         status.style.color = "red";
     }
 }
+
+
+// VARIABLES PARA EL GESTO TÁCTIL
+let touchStartX = 0;
+let touchEndX = 0;
+
+const sideMenu = document.getElementById('side-menu');
+
+// Detectar cuando el usuario pone el dedo en la pantalla
+sideMenu.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+}, {passive: true});
+
+// Detectar cuando el usuario mueve y levanta el dedo
+sideMenu.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}, {passive: true});
+
+function handleSwipe() {
+    // Si el movimiento hacia la izquierda es mayor a 50px, cerramos
+    if (touchStartX - touchEndX > 50) {
+        if (sideMenu.classList.contains('open')) {
+            toggleMenu();
+        }
+    }
+}
+
 
 /**
  * Nota: Al no usar preventDefault() en el evento 'beforeinstallprompt',
