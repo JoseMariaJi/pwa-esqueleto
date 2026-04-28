@@ -367,6 +367,62 @@ async function buscarActualizacionesRadical() {
 }
 
 
+async function actualizarDatosSistema() {
+    const btnContent = document.getElementById('header-title'); // O donde quieras mostrar el feedback
+    const originalText = btnContent.innerText;
+
+    try {
+        // 1. Feedback visual inicial
+        btnContent.innerText = "🔄 Actualizando...";
+
+        // 2. Llamada asíncrona al dominio
+        // Añadimos un timestamp para evitar cachés de red agresivas
+        const respuesta = await fetch(`https://servicios.ine.es/wstempus/js/es/VALORES_VARIABLE/115?det=f&t=${Date.now()}`);
+        
+        if (!respuesta.ok) throw new Error("Error en la red");
+
+        const nuevosDatos = await respuesta.json();
+
+        // 3. Persistencia Local
+        // Guardamos el JSON completo para uso offline futuro
+        localStorage.setItem('datos_app', JSON.stringify(nuevosDatos));
+        
+        // Si usas IndexedDB para datos pesados, aquí iría la lógica de apertura y guardado
+        // await guardarEnIndexedDB(nuevosDatos); 
+
+        // 4. Actualizar la pantalla
+        // En lugar de recargar, llamamos a una función que pinte los nuevos datos
+        renderizarDatosEnPantalla(nuevosDatos);
+
+        alert("¡Datos actualizados con éxito!");
+
+    } catch (error) {
+        console.error("Fallo al actualizar:", error);
+        alert("No se pudo actualizar. Se usarán los datos locales.");
+    } finally {
+        // 5. Restaurar interfaz
+        //btnContent.innerText = originalText;
+    }
+}
+
+/**
+ * Renderiza el JSON en crudo dentro de un contenedor
+ * @param {Object} datos - El objeto JSON devuelto por la API
+ */
+function renderizarDatosEnPantalla(datos) {
+    const contenedor = document.getElementById('app-content-config-server'); // O el ID de tu página activa
+    
+    // Usamos JSON.stringify con parámetros (null, 2) para que lo formatee con sangría
+    contenedor.innerHTML = `
+        <div style="padding: 20px;">
+            <h3>Datos Recibidos:</h3>
+            <pre style="background: #f4f4f4; border: 1px solid #ccc; padding: 15px; overflow-x: auto; border-radius: 5px;">
+${JSON.stringify(datos, null, 2)}
+            </pre>
+        </div>
+    `;
+}
+
 /**
  * Nota: Al no usar preventDefault() en el evento 'beforeinstallprompt',
  * Chrome en Android mostrará automáticamente el "Mini-infobar" o el

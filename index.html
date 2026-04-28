@@ -46,7 +46,23 @@
         <li onclick="navegar('Usuario', 'tipo2')">
             <span class="icon">👤</span> Perfil Usuario
         </li>
-        <li onclick="navegar('Configuración', 'tipo2')">
+        <li onclick="navegar('Configuración', 'tipo1','page-configuracion',[
+                { nombre: 'Configuración Server', 
+                    ejecutar: () => navegar('Datos servidor', 'tipo1', 'page-configuracion-server', [
+                    { 
+                        nombre: 'Sincronizar ahora', 
+                        ejecutar: () => actualizarDatosSistema() 
+                    }
+                ]) },
+                { nombre: 'Subopcion 2', ejecutar: () =>navegar('Subopcion 2', 'tipo2', 'page-configuracion-sub2') },
+                { nombre: 'Actualiza algo', ejecutar: () =>  actualizaAlgo() },
+                { nombre: 'Buscar actualizaciones', ejecutar: () => {
+                    if(confirm('La app se reiniciará para buscar la última versión. ¿Continuar?')) {
+                          buscarActualizacionesRadical();
+                        }
+                    } 
+                }
+        ])">
             <span class="icon">⚙️</span> Configuración
         </li>
         <li onclick="navegar('Más Ayuda', 'tipo1', CONFIG_MENU['Ayuda'])">
@@ -106,6 +122,23 @@
     <span>Añadir item</span>
 </button>
     </p>
+    </section>
+    <section id="page-configuracion" class="page">
+<p>esta es la pagina principal de configuracion</p>
+<p>tienes en el submenu una opcion de configuracion server que va y obtiene un json de la configuracion que quieres</p>
+    </section>
+    <section id="page-configuracion-server" class="page">
+        <p>esta es la pagina de configuracion del server</p>
+        
+        <div id="app-content-config-server"></div>
+        <button class="fab" onclick="validarYGuardar()">
+        💾
+    </button>
+
+    </section>
+    <section id="page-configuracion-sub2" class="page">
+        <p>Esta es otra pagina relativa a cosas de configuración</p>
+
     </section>
 
 </main>
