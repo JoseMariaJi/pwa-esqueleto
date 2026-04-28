@@ -20,6 +20,8 @@ html, body {
     overflow: hidden; /* Evita scroll en el body para que lo haga el contenedor principal */
     display: flex;
     flex-direction: column;
+    /* Desactiva el efecto de rebote y la línea de color de Chrome al tirar hacia abajo */
+    overscroll-behavior-y: contain;
 }
 
 /* =========================================
