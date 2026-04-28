@@ -401,7 +401,7 @@ async function actualizarDatosSistema() {
         alert("No se pudo actualizar. Se usarán los datos locales.");
     } finally {
         // 5. Restaurar interfaz
-        //btnContent.innerText = originalText;
+        btnContent.innerText = originalText;
     }
 }
 
