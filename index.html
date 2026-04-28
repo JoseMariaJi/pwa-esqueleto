@@ -54,7 +54,7 @@
                         ejecutar: () => actualizarDatosSistema() 
                     }
                 ]) },
-                { nombre: 'Subopcion 2', ejecutar: () =>navegar('Subopcion 2', 'tipo2', 'page-configuracion-sub2') },
+                { nombre: 'APIS externas', ejecutar: () =>navegar('Path APIS', 'tipo2', 'page-configuracion-api') },
                 { nombre: 'Actualiza algo', ejecutar: () =>  actualizaAlgo() },
                 { nombre: 'Buscar actualizaciones', ejecutar: () => {
                     if(confirm('La app se reiniciará para buscar la última versión. ¿Continuar?')) {
@@ -136,8 +136,17 @@
     </button>
 
     </section>
-    <section id="page-configuracion-sub2" class="page">
-        <p>Esta es otra pagina relativa a cosas de configuración</p>
+    <section id="page-configuracion-api" class="page">
+        <p>Introduce un valor de la URL donde estaran posibles APIS a usar</p>
+        <p>API (tiene que ser https://)<br>
+        <input type="url" 
+    name="URLAPI" 
+    id="URLAPI" 
+    placeholder="https://mi-dominio.com/api/"
+    style="width: 100%; padding: 10px;"></p>
+        <button class="fab" onclick="guardarConfiguracionManual()">
+        💾
+    </button>
 
     </section>
 

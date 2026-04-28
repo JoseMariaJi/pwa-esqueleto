@@ -47,3 +47,44 @@ workbox.routing.registerRoute(
 } else {
   console.log('Workbox falló al cargar');
 }
+
+// Escuchar el evento 'push'
+self.addEventListener('push', function(event) {
+    console.log('[Service Worker] Push recibido.');
+
+    let data = { titulo: 'Alerta de Datos', contenido: 'Algo ha cambiado.' };
+
+    // Si el servidor envía un JSON, lo parseamos
+    if (event.data) {
+        try {
+            data = event.data.json();
+        } catch (e) {
+            data.contenido = event.data.text();
+        }
+    }
+
+    const options = {
+        body: data.contenido,
+        icon: '/icons/icon-192.png', // Tu icono de PWA
+        badge: '/icons/icon-72.png', // Icono pequeño para la barra de estado
+        vibrate: [100, 50, 100],      // Vibración (opcional)
+        data: {
+            url: '/' // Podrías poner aquí una URL específica para abrir al pulsar
+        }
+    };
+
+    // Mostrar la notificación
+    event.waitUntil(
+        self.registration.showNotification(data.titulo, options)
+    );
+});
+
+// Escuchar el click en la notificación
+self.addEventListener('notificationclick', function(event) {
+    event.notification.close(); // Cerramos la notificación
+
+    // Abrir la app o llevar a una sección concreta
+    event.waitUntil(
+        clients.openWindow(event.notification.data.url)
+    );
+});

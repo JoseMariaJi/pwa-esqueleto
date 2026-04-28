@@ -143,7 +143,32 @@ function navegar(nombre, tipo, idPagina, acciones = []) {
         backNav.style.display = 'flex';
         document.getElementById('header-subtitle').innerText = nombre;
     }
+    ejecutarLogicaDePagina(idPagina);
 }
+
+function ejecutarLogicaDePagina(idSeccion) {
+    switch(idSeccion) {
+        case 'page-configuracion-api':
+            // Rellenamos el input con lo que haya en LocalStorage
+            const urlGuardada = localStorage.getItem('API_BASE_URL') || '';
+            const input = document.getElementById("URLAPI");
+            if (input) {
+                input.value = urlGuardada;
+            }
+            break;
+
+        case 'page-perfil-usuario':
+            // Ejemplo: Rellenar nombre de usuario
+            document.getElementById("nombreUser").value = localStorage.getItem('user_name') || '';
+            break;
+
+        case 'page-datos-ine':
+            // Podrías disparar la carga de datos del JSON automáticamente si quieres
+            // cargarDatosINE();
+            break;
+    }
+}
+
 
 function volver() {
     // Navegamos de vuelta a la página padre que guardamos previamente
@@ -421,6 +446,132 @@ ${JSON.stringify(datos, null, 2)}
             </pre>
         </div>
     `;
+}
+
+
+
+// FUNCION 1: El "almacén" de la llave pública
+async function obtenerVAPIDpublickey() {
+    const apiBase = localStorage.getItem('API_BASE_URL');
+    
+    // Si no hay URL configurada, el esqueleto avisa elegantemente
+    if (!apiBase || apiBase.includes('ponaquitudominio')) {
+        alert("⚠️ Configuración necesaria: Por favor, introduce una URL de API válida en los ajustes para activar las alertas.");
+        return null; 
+    }
+
+    let llave = localStorage.getItem('vapid_public_key');
+    if (!llave) {
+        try {
+            // 2. Intentamos la petición
+            const resp = await fetch(`${apiBase}get-vapid-key.php`);
+            
+            // Si el servidor responde pero con un error (ej. 404 No encontrado)
+            if (!resp.ok) {
+                throw new Error(`El servidor respondió con un error ${resp.status}`);
+            }
+
+            const data = await resp.json();
+            
+            // Si el JSON no tiene lo que buscamos
+            if (!data.public_key) {
+                throw new Error("El JSON recibido no contiene la clave 'public_key'");
+            }
+
+            llave = data.public_key;
+            localStorage.setItem('vapid_public_key', llave);
+
+        } catch (error) {
+            // 3. Si la URL no existe, no hay internet, o el JSON es inválido
+            console.error("Error al obtener VAPID:", error);
+            alert(`❌ Error de conexión con la API:\n${error.message}\n\nRevisa la URL en la configuración.`);
+            
+            // Opcional: Limpiamos la URL mal puesta para que no siga fallando
+            // localStorage.removeItem('API_BASE_URL'); 
+            
+            return null; // Abortamos el proceso
+        }
+    }
+    return llave;
+}
+
+// FUNCION 2: El enlace con el Navegador (Service Worker)
+async function obtenerDireccionPostal() {
+    const registration = await navigator.serviceWorker.ready;
+    let subscription = await registration.pushManager.getSubscription();
+    
+    if (!subscription) {
+        const llavePublica = await obtenerVAPIDpublickey(); // Llama a la Func 1
+        if (!llavePublica) return null;
+        subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(llavePublica)
+        });
+    }
+    return subscription;
+}
+
+// FUNCION 3: El enlace con tu lógica de negocio (PHP)
+async function registrarAlertaEnServidor(idEstacion) {
+    const apiBase = localStorage.getItem('API_BASE_URL');
+    
+    // Si no hay URL configurada, el esqueleto avisa elegantemente
+    if (!apiBase || apiBase.includes('ponaquitudominio')) {
+    alert("⚠️ Configuración necesaria: Por favor, introduce una URL de API válida en los ajustes para activar las alertas.");
+        return null; 
+    }
+
+    const sub = await obtenerDireccionPostal(); // Llama a la Func 2
+    
+    await fetch(`${apiBase}gestionar-alertas.php`, {
+        method: 'POST',
+        body: JSON.stringify({
+            subscription: sub,
+            estacion: idEstacion
+        })
+    });
+}
+
+
+// Al guardar la configuración
+function guardarConfiguracionManual() {
+    const input = document.getElementById("URLAPI");
+    let urlIntroducida = input.value.trim(); // .trim() quita espacios accidentales al inicio/final
+
+    // 1. Validar que no esté vacío
+    if (!urlIntroducida) {
+        alert("⚠️ Por favor, introduce una URL.");
+        return;
+    }
+
+    // 2. Validar que empiece por https
+    if (!urlIntroducida.startsWith('https://')) {
+        alert("❌ Error: La URL debe empezar por https:// (las PWA no aceptan conexiones inseguras).");
+        return;
+    }
+    // Aseguramos que termine en barra para evitar errores de concatenación
+    const urlLimpia = urlIntroducida.endsWith('/') ? urlIntroducida : urlIntroducida + '/';
+    localStorage.setItem('API_BASE_URL', urlLimpia);
+    
+    // Limpiamos la VAPID key antigua para forzar a la PWA a pedir la nueva al nuevo dominio
+    localStorage.removeItem('vapid_public_key');
+    
+    alert("✅ Configuración guardada correctamente.");
+}
+
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
 }
 
 /**
