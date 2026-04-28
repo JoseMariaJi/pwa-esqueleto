@@ -333,6 +333,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+
+async function buscarActualizacionesRadical() {
+    console.log("Iniciando purga total para actualización...");
+
+    if ('serviceWorker' in navigator) {
+        // 1. Obtener todos los registros de SW
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        
+        for (let registration of registrations) {
+            // 2. Desregistrar el Service Worker (lo borra del navegador)
+            await registration.unregister();
+        }
+
+        // 3. Limpiar las cachés de Workbox específicamente
+        // Workbox guarda las cosas en cachés con nombres como 'workbox-precache-...'
+        const cacheNames = await caches.keys();
+        await Promise.all(
+            cacheNames.map(name => {
+                console.log("Borrando caché:", name);
+                return caches.delete(name);
+            })
+        );
+
+        // 4. Recarga forzada desde el servidor
+        // Al no haber SW ni caché, el navegador bajará todo de nuevo (incluyendo el nuevo sw.js)
+        window.location.reload(true);
+    }
+}
+
+
 /**
  * Nota: Al no usar preventDefault() en el evento 'beforeinstallprompt',
  * Chrome en Android mostrará automáticamente el "Mini-infobar" o el

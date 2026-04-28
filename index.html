@@ -24,7 +24,13 @@
         <li onclick="navegar('Principal', 'tipo1','page-home',[
                 { nombre: 'Subopcion 1', ejecutar: () => navegar('Subopcion 1', 'tipo2', 'page-home-sub1') },
                 { nombre: 'Subopcion 2', ejecutar: () =>navegar('Subopcion 2', 'tipo2', 'page-home-sub2') },
-                { nombre: 'Actualiza algo', ejecutar: () =>  actualizaAlgo() }
+                { nombre: 'Actualiza algo', ejecutar: () =>  actualizaAlgo() },
+                { nombre: 'Buscar actualizaciones', ejecutar: () => {
+                    if(confirm('La app se reiniciará para buscar la última versión. ¿Continuar?')) {
+                          buscarActualizacionesRadical();
+                        }
+                    } 
+                }
         ])">
             <span class="icon">🏠</span> Principal
         </li>
