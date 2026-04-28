@@ -335,30 +335,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 async function buscarActualizacionesRadical() {
-    console.log("Iniciando purga total para actualización...");
+    console.log("Iniciando purga nuclear...");
 
-    if ('serviceWorker' in navigator) {
-        // 1. Obtener todos los registros de SW
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        
-        for (let registration of registrations) {
-            // 2. Desregistrar el Service Worker (lo borra del navegador)
-            await registration.unregister();
+    try {
+        // 1. Borrar todas las cachés (esto ya lo hacías bien, es vital)
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map(name => caches.delete(name)));
+        console.log("Cachés borradas");
+
+        if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            for (let registration of registrations) {
+                await registration.unregister();
+            }
+            console.log("Service Workers desregistrados");
         }
 
-        // 3. Limpiar las cachés de Workbox específicamente
-        // Workbox guarda las cosas en cachés con nombres como 'workbox-precache-...'
-        const cacheNames = await caches.keys();
-        await Promise.all(
-            cacheNames.map(name => {
-                console.log("Borrando caché:", name);
-                return caches.delete(name);
-            })
-        );
+        // 2. EL TRUCO MAESTRO: Evitar la caché del navegador en la recarga
+        // En lugar de un reload normal, añadimos un parámetro aleatorio a la URL
+        // Esto obliga al navegador a pensar que es una página nueva
+        const url = new URL(window.location.href);
+        url.searchParams.set('v', Date.now()); // Ej: ?v=1714382000
+        
+        console.log("Redirigiendo a versión limpia...");
+        window.location.href = url.toString();
 
-        // 4. Recarga forzada desde el servidor
-        // Al no haber SW ni caché, el navegador bajará todo de nuevo (incluyendo el nuevo sw.js)
-        window.location.reload(true);
+    } catch (error) {
+        console.error("Error en la purga:", error);
+        window.location.reload(); // Fallback
     }
 }
 

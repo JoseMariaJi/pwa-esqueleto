@@ -19,6 +19,7 @@ workbox.routing.registerRoute(
                  request.destination === 'style',
   new workbox.strategies.NetworkFirst({
     cacheName: 'recursos-criticosv2',
+    networkTimeoutSeconds: 3,
     plugins: [
       new workbox.expiration.ExpirationPlugin({
         maxEntries: 50, // No llenamos el móvil de basura
