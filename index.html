@@ -55,7 +55,7 @@
                     }
                 ]) },
                 { nombre: 'APIS externas', ejecutar: () =>navegar('Path APIS', 'tipo2', 'page-configuracion-api') },
-                { nombre: 'Actualiza algo', ejecutar: () =>  actualizaAlgo() },
+                { nombre: 'suscribir estacion', ejecutar: () =>  registrarAlertaEnServidor(23456) },
                 { nombre: 'Buscar actualizaciones', ejecutar: () => {
                     if(confirm('La app se reiniciará para buscar la última versión. ¿Continuar?')) {
                           buscarActualizacionesRadical();
