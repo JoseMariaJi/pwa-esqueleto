@@ -89,8 +89,30 @@ self.addEventListener('push', function(event) {
 
 // Escuchar el click en la notificación (Este código ya lo tienes bien)
 self.addEventListener('notificationclick', function(event) {
-    event.notification.close();
+    event.notification.close(); // Cierra el globito de la notificación
+
+    // La URL que quieres mostrar (la de tu PWA)
+    const urlBusqueda = new URL(event.notification.data.url, self.location.origin).href;
+
     event.waitUntil(
-        clients.openWindow(event.notification.data.url)
+        // Buscamos todas las ventanas/pestañas abiertas por este Service Worker
+        clients.matchAll({
+            type: 'window',
+            includeUncontrolled: true
+        }).then(function(windowClients) {
+            // 1. Intentamos encontrar una ventana que ya tenga nuestra URL abierta
+            for (let i = 0; i < windowClients.length; i++) {
+                let client = windowClients[i];
+                // Si la URL coincide y tiene la capacidad de ponerse en foco
+                if (client.url === urlBusqueda && 'focus' in client) {
+                    return client.focus();
+                }
+            }
+            // 2. Si no hay ninguna abierta (App cerrada), entonces sí la abrimos
+            // Al estar la PWA instalada, Android debería abrirla en su propio contenedor
+            if (clients.openWindow) {
+                return clients.openWindow(urlBusqueda);
+            }
+        })
     );
 });
