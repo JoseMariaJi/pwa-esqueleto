@@ -52,12 +52,21 @@ workbox.routing.registerRoute(
 self.addEventListener('push', function(event) {
     console.log('[Service Worker] Push recibido.');
 
-    let data = { titulo: 'Alerta de Datos', contenido: 'Algo ha cambiado.' };
+    // Valores por defecto por si falla el parseo
+    let data = { 
+        titulo: 'Alerta de Sistema', 
+        contenido: 'Hay nuevas actualizaciones disponibles.',
+        url: '/' 
+    };
 
-    // Si el servidor envía un JSON, lo parseamos
     if (event.data) {
         try {
-            data = event.data.json();
+            const rawData = event.data.json();
+            // Mapeo flexible: acepta 'titulo' o 'title', 'contenido' o 'body'
+            data.titulo = rawData.titulo || rawData.title || data.titulo;
+            data.contenido = rawData.contenido || rawData.body || data.contenido;
+            // Extraer la URL si viene dentro de un objeto 'data' o en la raíz
+            data.url = (rawData.data && rawData.data.url) || rawData.url || data.url;
         } catch (e) {
             data.contenido = event.data.text();
         }
@@ -65,25 +74,22 @@ self.addEventListener('push', function(event) {
 
     const options = {
         body: data.contenido,
-        icon: '/icons/icon-192.png', // Tu icono de PWA
-        badge: '/icons/icon-72.png', // Icono pequeño para la barra de estado
-        vibrate: [100, 50, 100],      // Vibración (opcional)
+        icon: 'icons/icon-192.png', 
+        badge: 'icons/icon-72.png', 
+        vibrate: [200, 100, 200],
         data: {
-            url: '/' // Podrías poner aquí una URL específica para abrir al pulsar
+            url: data.url // Guardamos la URL para el evento 'notificationclick'
         }
     };
 
-    // Mostrar la notificación
     event.waitUntil(
         self.registration.showNotification(data.titulo, options)
     );
 });
 
-// Escuchar el click en la notificación
+// Escuchar el click en la notificación (Este código ya lo tienes bien)
 self.addEventListener('notificationclick', function(event) {
-    event.notification.close(); // Cerramos la notificación
-
-    // Abrir la app o llevar a una sección concreta
+    event.notification.close();
     event.waitUntil(
         clients.openWindow(event.notification.data.url)
     );
