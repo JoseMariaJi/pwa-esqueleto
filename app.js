@@ -530,8 +530,18 @@ async function registrarAlertaEnServidor(idEstacion) {
             estacion: idEstacion
         })
     });
+    guardarAlertaLocalmente(idEstacion);
 }
 
+function guardarAlertaLocalmente(idEstacion) {
+    let alertas = JSON.parse(localStorage.getItem('mis_alertas_aemet') || '[]');
+    
+    // Si no está ya en la lista, la añadimos
+    if (!alertas.includes(idEstacion)) {
+        alertas.push(idEstacion);
+        localStorage.setItem('mis_alertas_aemet', JSON.stringify(alertas));
+    }
+}
 
 // Al guardar la configuración
 function guardarConfiguracionManual() {
