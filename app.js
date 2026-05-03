@@ -43,7 +43,7 @@ if (btnInstall) {
     console.log(`Usuario eligió: ${outcome}`);
 
     if (outcome === 'accepted') {
-        document.getElementById('wrapper-install').style.display = 'none';
+    document.getElementById('wrapper-install').style.display = 'none';
     }
     
     // Limpiamos la variable

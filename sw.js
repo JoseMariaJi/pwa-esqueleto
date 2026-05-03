@@ -116,3 +116,20 @@ self.addEventListener('notificationclick', function(event) {
         })
     );
 });
+
+// Al cargar la SPA
+navigator.serviceWorker.ready.then(reg => {
+    reg.pushManager.getSubscription().then(sub => {
+        if (!sub) {
+            // El endpoint ha caducado o no existe. 
+            // Intentamos re-suscribir automáticamente usando lo que tenemos en localStorage
+            console.warn("Suscripción no encontrada. Re-suscribiendo...");
+            obtenerDireccionPostal().then(nuevaSub => {
+                if (nuevaSub) sincronizarConServidor(nuevaSub);
+            });
+        } else {
+            // Si existe, aprovechamos para sincronizar y actualizar la 'ultima_sincronizacion'
+            sincronizarSuscripciones(sub);
+        }
+    });
+});
