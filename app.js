@@ -19,32 +19,47 @@ const CONFIG_MENU = {
 };
 
 let deferredPrompt;
+const btnInstall = document.getElementById('btn-install');
+
+// 1. Escuchar el evento de instalación
 window.addEventListener('beforeinstallprompt', (e) => {
-  console.log('beforeinstallprompt fired');
-  e.preventDefault();
-  deferredPrompt = e;
-  // HACEMOS VISIBLE EL BOTÓN
-  const btnInstall = document.getElementById('btn-install');
-  if (btnInstall) {
-    btnInstall.style.display = 'block';
-    btnInstall.addEventListener('click', triggerInstall);
-  }
-  // aquí puedes mostrar tu botón instalar si quieres:
-  // document.getElementById('btn-install').style.display = 'block';
+    e.preventDefault();
+    deferredPrompt = e;
+
+  // Mostramos el contenedor que envuelve al botón
+    const wrapper = document.getElementById('wrapper-install');
+    if (wrapper) wrapper.style.display = 'block';
 });
 
-async function triggerInstall() {
-  if (!deferredPrompt) return;
-  
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  console.log('userChoice', outcome);
-  
-  if (outcome === 'accepted') {
-    document.getElementById('btn-install').style.display = 'none';
-  }
-  deferredPrompt = null;
+// 2. Event listener del botón (definido una sola vez)
+if (btnInstall) {
+    btnInstall.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+
+    // Mostrar el prompt nativo
+    deferredPrompt.prompt();
+
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`Usuario eligió: ${outcome}`);
+
+    if (outcome === 'accepted') {
+        document.getElementById('wrapper-install').style.display = 'none';
+    }
+    
+    // Limpiamos la variable
+    deferredPrompt = null;
+});
 }
+
+// 3. Ocultar si ya está instalada (por si acaso)
+window.addEventListener('appinstalled', () => {
+    console.log('PWA instalada con éxito');
+    if (btnInstall) btnInstall.style.display = 'none';
+    deferredPrompt = null;
+});
+
+
+
 
 
 window.addEventListener('version-lista', () => {
@@ -532,7 +547,29 @@ async function registrarAlertaEnServidor(idEstacion) {
     });
     guardarAlertaLocalmente(idEstacion);
 }
+async function sincronizarSuscripciones() {
+    const registration = await navigator.serviceWorker.ready;
+    let subscription = await registration.pushManager.getSubscription();
 
+    if (subscription) {
+        // 1. Miramos qué estaciones tenemos guardadas en el móvil
+        const misEstaciones = JSON.parse(localStorage.getItem('mis_alertas_aemet') || '[]');
+
+        if (misEstaciones.length > 0) {
+            // 2. Enviamos al servidor el endpoint + la lista completa
+            // Tu API PHP debería estar preparada para recibir un array de estaciones
+            await fetch(`${API_BASE_URL}sincronizar-alertas.php`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    subscription: subscription,
+                    estaciones: misEstaciones
+                }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            console.log("Suscripciones sincronizadas con el servidor");
+        }
+    }
+}
 function guardarAlertaLocalmente(idEstacion) {
     let alertas = JSON.parse(localStorage.getItem('mis_alertas_aemet') || '[]');
     
