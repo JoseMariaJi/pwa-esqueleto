@@ -357,7 +357,7 @@ input, select, textarea {
 #camera-preview {
     position: absolute;
     top: 20px;
-    right: 20px;
+    left: calc(100% - 260px);
     width: 240px; /* Tamaño de la miniatura */
     aspect-ratio: 16 / 9; /* Forzamos formato horizontal */
     border: 2px solid #fff;
