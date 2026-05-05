@@ -40,7 +40,17 @@
     ])">
             <span class="icon">😏</span> Ayuda
         </li>
+
+        <li onclick="navegar('Videos Youtube', 'tipo1','page-videos',[
+                { nombre: 'Subopcion 1', ejecutar: () => navegar('Subopcion 1', 'tipo2', 'page-home-sub1') },
+                { nombre: 'Subopcion 2', ejecutar: () =>navegar('Subopcion 2', 'tipo2', 'page-home-sub2') },
+                { nombre: 'Subopcion 3', ejecutar: () => navegar('Subopcion 2', 'tipo2', 'page-home-sub2') },
+                
+        ])">
+            <span class="icon">🎞️</span> videos youtube
+        </li>
         
+
         <hr class="menu-divider">
         
         <li onclick="navegar('Usuario', 'tipo2')">
@@ -96,18 +106,28 @@
         <p>Aqui, que se vea la opcion mas principal, no solo una página de bienvenida.</p>
         <p>y que tenga subopciones para cambmiar el contenido de esta página, aun siendo de la home.</p>
         <button onclick="alert('Hola')">Botón de prueba</button>
-    <div>
-        <p>este es el div id=algo</p>
-        <div id="algo">jksdjhkjsjhhsjk</div>
-    </div>
+        <div>
+            <p>este es el div id=algo</p>
+            <div id="algo">jksdjhkjsjhhsjk</div>
+        </div>
 
-<!-- Banner de Instalación (opcionalmente más visual) -->
-    <div id="wrapper-install" style="display:none; margin-top: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 8px;">
-        <p>¿Te gusta la app? Instálala para acceder más rápido.</p>
-        <button id="btn-install">Instalar App en el dispositivo</button>
-    </div>
+    <!-- Banner de Instalación (opcionalmente más visual) -->
+        <div id="wrapper-install" style="display:none; margin-top: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 8px;">
+            <p>¿Te gusta la app? Instálala para acceder más rápido.</p>
+            <button id="btn-install">Instalar App en el dispositivo</button>
+        </div>
     
-   </section>
+    </section>
+    <section id="page-videos" class="page">
+        <h3>Lista de videos</h3>
+    <button onclick="prepararSesionVideo('a1Femq4NPxs')">Ejercicio de Hombro</button>
+    <button onclick="prepararSesionVideo('zAfrPjTvSNs')">Fortalecimiento Lumbar</button>
+    <button onclick="prepararSesionVideo('VIDEO_ID_3')">Movilidad de Cuello</button>
+
+    </section>
+    <section id="section-video-player" class="page">
+
+    </section>
 
     <section id="page-home-sub1" class="page">
         <p>Este es el contenido de la principal, pero de la subopcion 1</p>
@@ -174,5 +194,6 @@
   document.head.appendChild(script);
 </script>
     <script src="./app.js" defer></script>
+    <script src="./appvideo.js" defer></script>
 </body>
 </html>
