@@ -139,7 +139,7 @@ function navegar(nombre, tipo, idPagina, acciones = []) {
 
     // 2. Gestión de Secciones (Cuerpo)
     if (idPagina !== '_self' && idPagina !== null) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.page, .app-section').forEach(p => p.classList.remove('active'));
         const targetPage = document.getElementById(idPagina);
         if (targetPage) {
             targetPage.classList.add('active');

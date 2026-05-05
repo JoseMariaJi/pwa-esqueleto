@@ -332,7 +332,10 @@ input, select, textarea {
 
 /* Contenedor principal de tu sección */
 .video-layout {
-    position: relative;
+    position: absolute; /*relative;*/
+    top:0;
+    left:0;
+    padding:0;
     width: 100vw;
     height: 100vh;
     background: #000;
@@ -346,7 +349,7 @@ input, select, textarea {
 /* El div de YouTube debe ser 16:9 */
 #youtube-player {
     width: 100%;
-    max-width: 1200px; /* Opcional: para que no se estire infinito en PC */
+    /*max-width: 1200px; /* Opcional: para que no se estire infinito en PC */
     aspect-ratio: 16 / 9;
 }
 
@@ -359,13 +362,14 @@ input, select, textarea {
     aspect-ratio: 16 / 9; /* Forzamos formato horizontal */
     border: 2px solid #fff;
     border-radius: 8px;
-    z-index: 10;
+    z-index: 20;
+    pointer-events: none;
     object-fit: cover; /* Recorta el exceso para no deformar */
     background: #222;
 }
 
 /* Controles de la PWA (botones de adelantar, salir, etc.) */
-.video-controls {
+/*.video-controls {
     position: absolute;
     bottom: 20px;
     width: 100%;
@@ -374,10 +378,31 @@ input, select, textarea {
     align-items: center;
     gap: 10px;
     z-index: 20;
-    background: rgba(0, 0, 0, 0.5); /* Fondo para que se vean los botones */
+    background: rgba(0, 0, 0, 0.5); /* Fondo para que se vean los botones 
     padding: 10px 0;
+}*/
+/* La botonera: en línea y debajo del video */
+.video-controls {
+    /* Quitamos position: absolute para que fluya después del video */
+    width: 100%;
+    display: flex;
+    flex-direction: row; /* Todos los botones en línea */
+    flex-wrap: wrap; /* Por si son muchos y no caben en móviles pequeños */
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 10px;
+    background: #111; /* Un gris muy oscuro para diferenciar de la zona de video */
+    z-index: 20;
 }
-
+.video-controls button {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    white-space: nowrap; /* Evita que el texto del botón se parta */
+}
 /* Mensajes de estado (flotando sobre el video) */
 #status-overlay {
     position: absolute;

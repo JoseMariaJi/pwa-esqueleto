@@ -214,6 +214,6 @@ function activarSeccion(id) {
     document.querySelectorAll('.page, .app-section').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     // Para asegurar visibilidad si usas display:none en lugar de clases CSS
-    document.querySelectorAll('.page, .app-section').forEach(p => p.style.display = 'none');
-    document.getElementById(id).style.display = 'block';
+    //document.querySelectorAll('.page, .app-section').forEach(p => p.style.display = 'none');
+    //document.getElementById(id).style.display = 'block';
 }
