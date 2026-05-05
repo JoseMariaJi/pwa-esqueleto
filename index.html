@@ -125,10 +125,31 @@
     <button onclick="prepararSesionVideo('VIDEO_ID_3')">Movilidad de Cuello</button>
 
     </section>
-    <section id="section-video-player" class="page">
+ <section id="section-video-player" class="page">
+    <div class="video-layout">
+        <!-- Contenedor donde YouTube meterá el IFrame -->
+        <div id="youtube-player"></div>
+        
+        <!-- Previsualización de la cámara del paciente -->
+        <video id="camera-preview" autoplay playsinline muted style="display:none;"></video>
+        
+        <!-- Capa de mensajes y estados -->
+        <div id="status-overlay">
+            <p id="status-msg"></p>
+        </div>
 
-    </section>
-
+        <!-- Controles de la PWA -->
+        <div class="video-controls">
+            <button id="btn-main-action" class="btn-primary" style="display:none;"></button>
+            <div class="extra-controls">
+                <button onclick="saltar10Segundos(-10)">⏪ -10s</button>
+                <button onclick="alternarMute()">🔊 Mute</button>
+                <button onclick="saltar10Segundos(10)">⏩ +10s</button>
+            </div>
+            <button onclick="salirDelReproductor()" class="btn-link">Cancelar y Volver</button>
+        </div>
+    </div>
+</section>
     <section id="page-home-sub1" class="page">
         <p>Este es el contenido de la principal, pero de la subopcion 1</p>
         <p>Ah!, y tiene un boton fab</p>

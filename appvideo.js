@@ -23,6 +23,9 @@ function onYouTubeIframeAPIReady() {
  * Función principal disparada desde 'page-videos'
  */
 async function prepararSesionVideo(youtubeId) {
+    // B. Cambiar de sección en la SPA
+    activarSeccion('section-video-player');
+    
     // A. Preguntar al usuario
     const quiereGrabar = confirm("¿Deseas grabarte realizando los ejercicios para tu terapeuta?");
 
@@ -72,17 +75,30 @@ async function configurarModoGrabacion() {
  */
 function configurarModoSoloVideo() {
     grabando = false;
-    document.getElementById('camera-preview').style.display = "none";
-    document.getElementById('status-msg').innerText = "Pulsa play para empezar";
     
+    // Referencias a los elementos
+    const cameraPreview = document.getElementById('camera-preview');
+    const statusMsg = document.getElementById('status-msg');
     const btnMain = document.getElementById('btn-main-action');
+
+    // Comprobación de seguridad: si no existen, algo va mal en el HTML
+    if (!cameraPreview || !statusMsg || !btnMain) {
+        console.error("❌ No se encontraron los elementos necesarios en el DOM.");
+        return;
+    }
+
+    cameraPreview.style.display = "none";
+    statusMsg.innerText = "Pulsa play para empezar";
+    
+    btnMain.style.display = "block"; 
     btnMain.innerText = "Reproducir Ejercicio";
     btnMain.onclick = () => {
-        player.playVideo();
-        btnMain.style.display = "none";
+        if (player && typeof player.playVideo === "function") {
+            player.playVideo();
+            btnMain.style.display = "none";
+        }
     };
 }
-
 /**
  * Inicia la grabación del paciente y el video de YouTube
  */
