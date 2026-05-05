@@ -271,3 +271,50 @@ function activarSeccion(id) {
     //document.querySelectorAll('.page, .app-section').forEach(p => p.style.display = 'none');
     //document.getElementById(id).style.display = 'block';
 }
+
+async function cargarVideosRecibidos() {
+    const contenedor = document.getElementById('lista-videos-contenedor');
+    const apiBase = localStorage.getItem('API_BASE_URL');
+    
+    if (!apiBase) {
+        contenedor.innerHTML = "<p>Error: No se ha configurado la API_BASE_URL.</p>";
+        return;
+    }
+
+    try {
+        // 1. Llamamos al script que lista los ficheros
+        const response = await fetch(`${apiBase}listar-videos.php`);
+        const videos = await response.json();
+
+        if (videos.length === 0) {
+            contenedor.innerHTML = "<p>No hay videos recibidos todavía.</p>";
+            return;
+        }
+
+        // 2. Limpiamos el contenedor y creamos los links
+        contenedor.innerHTML = ""; // Limpiar el "Cargando..."
+        
+        videos.forEach(video => {
+            const videoCard = document.createElement('div');
+            videoCard.className = "video-item-card"; // Puedes darle estilo en CSS
+            
+            // Creamos la URL completa al video
+            const urlCompleta = `${apiBase}videos-fisio/${video.nombre}`;
+            
+            videoCard.innerHTML = `
+                <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>${video.nombre}</strong><br>
+                        <small>Recibido: ${video.fecha}</small>
+                    </div>
+                    <a href="${urlCompleta}" target="_blank" class="btn-primary" style="text-decoration: none; padding: 5px 10px;">Ver Video ↗</a>
+                </div>
+            `;
+            contenedor.appendChild(videoCard);
+        });
+
+    } catch (err) {
+        console.error("Error al cargar la lista:", err);
+        contenedor.innerHTML = "<p>Error al conectar con el servidor.</p>";
+    }
+}

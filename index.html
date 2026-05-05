@@ -42,7 +42,7 @@
             </li>
 
             <li onclick="navegar('Videos Youtube', 'tipo1','page-videos',[
-                    { nombre: 'Subopcion 1', ejecutar: () => navegar('Subopcion 1', 'tipo2', 'page-home-sub1') },
+                    { nombre: 'Subopcion 1', ejecutar: () => cargarVideosRecibidos() },
                     { nombre: 'Subopcion 2', ejecutar: () =>navegar('Subopcion 2', 'tipo2', 'page-home-sub2') },
                     { nombre: 'Subopcion 3', ejecutar: () => navegar('Subopcion 2', 'tipo2', 'page-home-sub2') },
                     
@@ -123,7 +123,13 @@
         <button onclick="prepararSesionVideo('a1Femq4NPxs')">Ejercicio de Hombro</button>
         <button onclick="prepararSesionVideo('zAfrPjTvSNs')">Fortalecimiento Lumbar</button>
         <button onclick="prepararSesionVideo('VIDEO_ID_3')">Movilidad de Cuello</button>
-
+            <div class="container">
+                <h2>Videos Recibidos (Terapeuta)</h2>
+                <div id="lista-videos-contenedor">
+                    <p>Cargando videos...</p>
+                </div>
+            <!--<button onclick="activarSeccion('section-menu')" class="btn-link">Volver al Menú</button>-->
+            </div>
         </section>
     <section id="section-video-player" class="page">
         <div class="video-layout">
@@ -154,6 +160,15 @@
 
         </div>
     </section>
+    <section id="section-lista-recibidos" class="page" >
+    <div class="container">
+        <h2>Videos Recibidos (Terapeuta)</h2>
+        <div id="lista-videos-contenedor">
+            <p>Cargando videos...</p>
+        </div>
+        <button onclick="activarSeccion('section-menu')" class="btn-link">Volver al Menú</button>
+    </div>
+</section>
     <section id="page-home-sub1" class="page">
         <p>Este es el contenido de la principal, pero de la subopcion 1</p>
         <p>Ah!, y tiene un boton fab</p>
