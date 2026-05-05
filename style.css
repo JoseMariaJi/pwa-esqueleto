@@ -356,8 +356,8 @@ input, select, textarea {
 /* La cámara del paciente: Miniatura en la esquina */
 #camera-preview {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    /*top: 20px;
+    right: 20px;*/
     width: 240px; /* Tamaño de la miniatura */
     aspect-ratio: 16 / 9; /* Forzamos formato horizontal */
     border: 2px solid #fff;
