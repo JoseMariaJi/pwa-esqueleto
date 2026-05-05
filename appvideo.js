@@ -63,7 +63,7 @@ async function configurarModoGrabacion() {
         stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         preview.srcObject = stream;
         preview.style.display = "block"; // Mostramos el recuadro de la cámara
-
+         hacerMovible(dpreview);
         // El botón iniciará la reproducción y la grabación simultánea
         btnMain.onclick = comenzarGrabacionYVideo;
 
@@ -121,7 +121,7 @@ function comenzarGrabacionYVideo() {
     }
 
     player.playVideo();
-    hacerMovible(document.getElementById('camera-preview'));
+   
     // Cambiar botón para poder finalizar manualmente
     btnMain.innerText = "Finalizar ahora";
     btnMain.classList.add('btn-danger');
