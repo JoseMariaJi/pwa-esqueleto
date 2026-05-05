@@ -4,12 +4,42 @@ if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js')
             .then(registration => {
                 console.log('✅ PWA: Service Worker registrado con éxito');
+
+                // Retornamos la promesa 'ready' para encadenar la lógica de suscripción
+                return navigator.serviceWorker.ready;
+            })
+            .then(reg => {
+                // Este bloque se ejecuta cuando el SW está activo y listo para notificaciones
+                console.log('📬 PWA: Verificando suscripción Push...');
+
+                reg.pushManager.getSubscription().then(sub => {
+                    if (!sub) {
+                        // El endpoint ha caducado o no existe
+                        console.warn("⚠️ Suscripción no encontrada. Re-suscribiendo...");
+                        
+                        // Estas funciones deben estar definidas en tu app.js o accesibles desde él
+                        if (typeof obtenerDireccionPostal === "function") {
+                            obtenerDireccionPostal().then(nuevaSub => {
+                                if (nuevaSub && typeof sincronizarConServidor === "function") {
+                                    sincronizarConServidor(nuevaSub);
+                                }
+                            });
+                        }
+                    } else {
+                        // Si existe, sincronizamos con el servidor
+                        console.log("✅ Suscripción activa encontrada.");
+                        if (typeof sincronizarSuscripciones === "function") {
+                            sincronizarSuscripciones(sub);
+                        }
+                    }
+                });
             })
             .catch(error => {
                 console.log('❌ PWA: Error al registrar el Service Worker:', error);
             });
     });
 }
+
 
 const CONFIG_MENU = {
     'Ayuda': [
