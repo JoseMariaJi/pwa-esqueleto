@@ -362,7 +362,7 @@ input, select, textarea {
     aspect-ratio: 16 / 9; /* Forzamos formato horizontal */
     border: 2px solid #fff;
     border-radius: 8px;
-    z-index: 20;
+    z-index: 50;
     pointer-events: none;
     object-fit: cover; /* Recorta el exceso para no deformar */
     background: #222;
