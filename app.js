@@ -13,6 +13,7 @@ if ('serviceWorker' in navigator) {
                 console.log('📬 PWA: Verificando suscripción Push...');
 
                 reg.pushManager.getSubscription().then(sub => {
+                    const apiBase = localStorage.getItem('API_BASE_URL');
                     if (!sub) {
                         // El endpoint ha caducado o no existe
                         console.warn("⚠️ Suscripción no encontrada. Re-suscribiendo...");
@@ -588,7 +589,8 @@ async function sincronizarSuscripciones() {
         if (misEstaciones.length > 0) {
             // 2. Enviamos al servidor el endpoint + la lista completa
             // Tu API PHP debería estar preparada para recibir un array de estaciones
-            await fetch(`${API_BASE_URL}sincronizar-alertas.php`, {
+            const apiBase = localStorage.getItem('API_BASE_URL');
+            await fetch(`${apiBase}sincronizar-alertas.php`, {
                 method: 'POST',
                 body: JSON.stringify({
                     subscription: subscription,
