@@ -23,16 +23,20 @@ function onYouTubeIframeAPIReady() {
  * Función principal disparada desde 'page-videos'
  */
 async function prepararSesionVideo(youtubeId) {
-    // B. Cambiar de sección en la SPA
+    // 1. Cambiar sección
     activarSeccion('section-video-player');
     
+    // 2. Intentar forzar horizontal (Landscape)
+    if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(() => {
+            console.log("El bloqueo de orientación requiere pantalla completa o no es soportado.");
+        });
+    }
+
     // A. Preguntar al usuario
     const quiereGrabar = confirm("¿Deseas grabarte realizando los ejercicios para tu terapeuta?");
 
-    // B. Cambiar de sección en la SPA
-    activarSeccion('section-video-player');
-
-    // C. Configurar el reproductor de YouTube (común para ambos casos)
+    // C. Configurar el reproductor
     crearReproductorYoutube(youtubeId);
 
     if (quiereGrabar) {
@@ -41,7 +45,6 @@ async function prepararSesionVideo(youtubeId) {
         configurarModoSoloVideo();
     }
 }
-
 /**
  * Caso 1: El usuario SÍ quiere grabarse (Encuadre previo)
  */
