@@ -366,6 +366,8 @@ input, select, textarea {
     pointer-events: none;
     object-fit: cover; /* Recorta el exceso para no deformar */
     background: #222;
+    cursor:move;
+    touch-action: none;
 }
 
 /* Controles de la PWA (botones de adelantar, salir, etc.) */

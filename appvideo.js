@@ -56,7 +56,7 @@ async function configurarModoGrabacion() {
         const btnMain = document.getElementById('btn-main-action');
 
         msg.innerText = "Posiciónate frente a la cámara";
-        btnMain.innerText = "¡Listo! Empezar";
+        btnMain.innerText = "Empezar";
         btnMain.style.display = "block";
 
         // Activar cámara para el encuadre
@@ -121,12 +121,63 @@ function comenzarGrabacionYVideo() {
     }
 
     player.playVideo();
-    
+    hacerMovible(document.getElementById('camera-preview'));
     // Cambiar botón para poder finalizar manualmente
     btnMain.innerText = "Finalizar ahora";
     btnMain.classList.add('btn-danger');
     btnMain.onclick = detenerTodo;
 }
+
+function hacerMovible(elemento) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+    // Eventos para Ratón
+    elemento.onmousedown = arrastrarInicio;
+    // Eventos para Pantalla Táctil
+    elemento.ontouchstart = arrastrarInicio;
+
+    function arrastrarInicio(e) {
+        e.preventDefault();
+        // Obtener posición inicial del cursor/dedo
+        if (e.type === 'touchstart') {
+            pos3 = e.touches[0].clientX;
+            pos4 = e.touches[0].clientY;
+        } else {
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+        }
+        
+        document.onmouseup = detenerArrastre;
+        document.onmousemove = arrastrarMovimiento;
+        document.ontouchend = detenerArrastre;
+        document.ontouchmove = arrastrarMovimiento;
+    }
+
+    function arrastrarMovimiento(e) {
+        e.preventDefault();
+        // Calcular nueva posición
+        let clientX = (e.type === 'touchmove') ? e.touches[0].clientX : e.clientX;
+        let clientY = (e.type === 'touchmove') ? e.touches[0].clientY : e.clientY;
+
+        pos1 = pos3 - clientX;
+        pos2 = pos4 - clientY;
+        pos3 = clientX;
+        pos4 = clientY;
+
+        // Aplicar la nueva posición al elemento
+        elemento.style.top = (elemento.offsetTop - pos2) + "px";
+        elemento.style.left = (elemento.offsetLeft - pos1) + "px";
+    }
+
+    function detenerArrastre() {
+        // Limpiar eventos cuando se suelta
+        document.onmouseup = null;
+        document.onmousemove = null;
+        document.ontouchend = null;
+        document.ontouchmove = null;
+    }
+}
+
 
 /**
  * Detiene tanto el video como la grabación
