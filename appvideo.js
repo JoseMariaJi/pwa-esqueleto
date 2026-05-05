@@ -131,15 +131,19 @@ function comenzarGrabacionYVideo() {
 function hacerMovible(elemento) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
-    // Eventos para Ratón
     elemento.onmousedown = arrastrarInicio;
-    // Eventos para Pantalla Táctil
-    elemento.ontouchstart = arrastrarInicio;
+    // Usamos addEventListener para tener más control sobre el 'passive'
+    elemento.addEventListener('touchstart', arrastrarInicio, { passive: false });
 
     function arrastrarInicio(e) {
-        e.preventDefault();
-        // Obtener posición inicial del cursor/dedo
+        // --- AQUÍ ESTÁ EL TRUCO ---
+        e.stopPropagation(); // Evita que el 'contentArea' se entere del toque
+        
+        // Si es táctil, el preventDefault evita que el navegador intente hacer scroll o refresh
         if (e.type === 'touchstart') {
+            // No hacemos preventDefault en mouse para no romper clics normales si los hubiera,
+            // pero en touch es vital.
+            e.preventDefault(); 
             pos3 = e.touches[0].clientX;
             pos4 = e.touches[0].clientY;
         } else {
@@ -154,8 +158,9 @@ function hacerMovible(elemento) {
     }
 
     function arrastrarMovimiento(e) {
-        e.preventDefault();
-        // Calcular nueva posición
+        e.stopPropagation(); // También detenemos el movimiento
+        if (e.cancelable) e.preventDefault(); 
+
         let clientX = (e.type === 'touchmove') ? e.touches[0].clientX : e.clientX;
         let clientY = (e.type === 'touchmove') ? e.touches[0].clientY : e.clientY;
 
@@ -164,13 +169,11 @@ function hacerMovible(elemento) {
         pos3 = clientX;
         pos4 = clientY;
 
-        // Aplicar la nueva posición al elemento
         elemento.style.top = (elemento.offsetTop - pos2) + "px";
         elemento.style.left = (elemento.offsetLeft - pos1) + "px";
     }
 
     function detenerArrastre() {
-        // Limpiar eventos cuando se suelta
         document.onmouseup = null;
         document.onmousemove = null;
         document.ontouchend = null;
@@ -213,9 +216,9 @@ async function ofrecerEnvioAlTerapeuta() {
 async function enviarVideoAlServidor(blob) {
     const formData = new FormData();
     formData.append('video', blob, `ejercicio_${Date.now()}.webm`);
-
+    const apiBase = localStorage.getItem('API_BASE_URL');
     try {
-        const response = await fetch('https://tu-servidor.com/api/upload', {
+        const response = await fetch(`${apiBase}upload-video.php`, {
             method: 'POST',
             body: formData
         });

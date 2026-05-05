@@ -368,6 +368,7 @@ input, select, textarea {
     background: #222;
     cursor:move;
     touch-action: none;
+    overscroll-behavior: contain; /* Evita que el scroll se propague al padre */
 }
 
 /* Controles de la PWA (botones de adelantar, salir, etc.) */

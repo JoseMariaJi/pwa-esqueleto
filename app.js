@@ -330,6 +330,7 @@ contentArea.addEventListener('touchmove', e => {
     }
 }, {passive: true});
 
+
 function actualizaAlgo(){
     generarContenidoAleatorio('algo');
 }
