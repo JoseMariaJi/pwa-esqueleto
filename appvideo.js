@@ -63,7 +63,7 @@ async function configurarModoGrabacion() {
         stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         preview.srcObject = stream;
         preview.style.display = "block"; // Mostramos el recuadro de la cámara
-         hacerMovible(dpreview);
+         hacerMovible(preview);
         // El botón iniciará la reproducción y la grabación simultánea
         btnMain.onclick = comenzarGrabacionYVideo;
 
